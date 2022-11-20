@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>객체 끝말잇기 게임 이벤트 리스너 방식</title>
+
+</head>
+
+<body>
+	<p id = 'order'>참가자</p>
+	<p>
+		<div id = word>제시어:</div>
+	</p>
+	<input type = "text" placeholder="단어를 제시해 주세요">
+	<button>button</button><br>
+
+</body>
+
+<script type="text/javascript">
+	const number = Number(prompt('몇명이 참가하나요?'));
+	const $button = document.querySelector('button');
+	const $input = document.querySelector('input');
+	const $word = document.querySelector("#word"); // Dom구조의 데이터들 중에서 태그안에 id = '값' 설정할 수 있는데
+	const $order = document.querySelector("#order");
+	let order; // 참가자 순서 
+	let word; // 제시어
+	let newWord; // 현재 단어
+	/* 	이벤트 함수 */
+	const onClickButton = ()=> {
+		if(!word){ // 최초 실행할때 word는 비어있음 그래서 undefined !을 하면 true가 되서 실행	
+			word = newWord;// 단어 
+			$word.textContent = '제시어: '+word; // 객체 태그.textcontext태그 내부의 문자열을 가져오거나 설정
+			order = 1;
+			$order.textContent = order+'번 참가자';
+		}
+		else{
+			if(word[word.length-1] == newWord[0]){// 끝말잇기가 잘 연결된 경우
+				// 화면에 표시한다.
+				word = newWord;// 단어 
+				$word.textContent = '제시어: '+word;
+				if(order >= number){
+					order=1;
+					$order.textContent = order+'번 참가자';
+				}
+				else{
+				order +=1;
+				$order.textContent = order +'번 참가자';
+				}
+				
+			}else{ // 끝말잇기 실패
+				alert("올바르지 않은 단어입니다.");
+			}
+		}
+	};
+	const onInput = (event) => {
+		//console.log('글자입력',event.target.value);
+		newWord = event.target.value; // 입력하는 단어를 현재 단어로 변경
+		}
+	/*이벤트 리스너  */
+	$button.addEventListener('click', onClickButton);
+	$input.addEventListener('input',onInput);
+	/* dom 객체에 있는 button tag객체를 가져온다 */
+	
+	/* button객체에 이벤트 리스너를 통해 이벤트를 등록한다 */
+	/* $button.addEventListener('click',onClickButton); */
+	
+	
+	/* 입력 tag에 대한 이벤트 처리 */
+</Script>
+</html>
