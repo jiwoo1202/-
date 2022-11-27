@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>가위바위보</title>
+<style type="text/css">
+	#computer{
+		width:165px;
+		height:200px;
+	}
+
+</style>
+</head>
+<body>
+		<div id = 'computer'></div>
+		<div>
+			<button id = 'scissors' class = 'btn'>가위</button>
+			<button id = 'rock' class = 'btn'>바위</button>
+			<button id = 'paper' class = 'btn'>보</button>
+		</div>
+		<div id = 'score'>0</div>
+		<script type='text/javascript'>
+			const $computer = document.querySelector('#computer');
+			const $scissors = document.querySelector('#scissors');
+			const $rock = document.querySelector('#rock');
+			const $paper = document.querySelector('#paper');
+			const $score = document.querySelector('#score');
+			const IMG_URL = './rsp.png';
+			
+			$computer.style.background = `url(${IMG_URL}) 0 0` // 가위
+		//	$computer.style.background = `url(${IMG_URL}) -220px 0` // 바위
+		//	$computer.style.background = `url(${IMG_URL}) -440px 0` // 보
+			
+		//	$computer.style.backgroundSize = `auto 200px`; //가로는 오토 , 세로는 200px
+			const rspX = {
+					scissors:'0',//가위
+					rock : '-220px',//바위
+					paper : '-440px'//보
+			};
+			let computerChoice = 'scissors';
+			const changeComputerHand = ()=>{
+				if(computerChoice == 'rock'){
+					computerChoice = 'scissors'
+				}
+				else if(computerChoice == 'scissors'){
+					computerChoice = 'paper';
+				}
+				else if(computerChoice == 'paper'){
+					computerChoice = 'rock';
+				}
+			$computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+			$computer.style.backgroundSize = `auto 200px`;
+				//setTimeout(changeComputerHand,50); // 주기적으로 실행
+			}
+				//setTimeout(changeComputerHand,50);// 최초 한번
+			
+			let intervalid = setInterval(changeComputerHand,50); // 최초구동
+			//clearInterval(intervalid);
+			//이벤트함수 생성 점수계산 및 화편 표시 이벤트제거로 버그제거
+		/* 	const clickButton = () =>{
+				clearInterval(intervalid); // 가위바위보 멈춤
+				$scissors.removeEventListener('click',clickButton);
+				$rock.removeEventListener('click',clickButton);
+				$paper.removeEventListener('click',clickButton);
+				
+				// 점수 계산 및 화면에 표시
+				setTimeout(() => {
+					$scissors.addEventListener('click',clickButton);
+					$rock.addEventListener('click',clickButton);
+					$paper.addEventListener('click',clickButton);
+					intervalid = setInterval(changeComputerHand,50);
+				}, 1000);
+			}; */
+			
+			// 점수표
+			const scoreTable = {
+					'rock':0,
+					'scissors':1,
+					'paper':-1
+			};
+			
+			
+			
+			let clickable = true;
+			// event 파라메터는 생략가능
+			let score = 0
+			const clickButton = (e) =>{
+				if(clickable){
+					clearInterval(intervalid);
+					clickable  =false;
+					const myChoice = e.target.id
+					const myScore = scoreTable[myChoice]
+					const computerScore = scoreTable[computerChoice];
+					const diff = myScore -computerScore;
+					
+					if(diff == 2 || diff ==-1){
+						//이김
+						score += 1
+					}else if(diff == -2 || diff == 1){
+						//짐
+						score -= 1
+					}else{
+						//비겼을때 추가적으로 하고 싶은 로직
+						score = 0
+					}
+				}
+				$score.textContent =`${score}` 
+				// 점수 계산 및 화면에 표시
+				setTimeout(() => {
+					clickable = true;
+					intervalid = setInterval(changeComputerHand,50);
+				}, 1000);
+			};
+			// 이벤트 등록
+			$scissors.addEventListener('click',clickButton);
+			$rock.addEventListener('click',clickButton);
+			$paper.addEventListener('click',clickButton);
+			
+	/* 이미지 스프라이트
+		이미지 요청 횟수를 줄이기 위한 방법 : 서버에 한번만 요청
+	*/			
+			
+		</script>
+</body>
+</html>
